@@ -1,197 +1,204 @@
+#+OPTIONS: toc:2
+#+TITLE: Org-Noter Manual
+#+TEXINFO_DIR_CATEGORY: Emacs
+#+TEXINFO_DIR_NAME: Org-Noter
+#+TEXINFO_DIR_DESC: Connect PDF files to Org files
+
+* Org-Noter: An Introduction
 The official repo for this package is https://github.com/org-noter/org-noter/tree/master
 
-* Org-noter: an interleaving/note-taking package for documents
-  [[https://melpa.org/#/org-noter][file:https://melpa.org/packages/org-noter-badge.svg]]
-  [[https://coveralls.io/github/org-noter/org-noter?branch=master][file:https://coveralls.io/repos/github/org-noter/org-noter/badge.svg?branch=master]]
+[[https://melpa.org/#/org-noter][file:https://melpa.org/packages/org-noter-badge.svg]]
+[[https://coveralls.io/github/org-noter/org-noter?branch=master][file:https://coveralls.io/repos/github/org-noter/org-noter/badge.svg?branch=master]]
 
-  ~Org-noter~, by [[https://github.com/weirdNox][Gonçalo Santos]], was inspired by the now-orphaned ~Interleave~
-  package, by [[https://github.com/rudolfochrist][Sebastian Christ]].  In Sebastian's words (with minor edits):
+~Org-noter~ is an interleaving/note-taking package for documents.
 
-  #+begin_quote
-  In the past, textbooks were sometimes published as interleaved editions. That
-  meant, each page was followed by a blank page and ambitious students/scholars
-  had the ability to take their notes directly in their copy of the
-  textbook. Newton and Kant were prominent representatives of this
-  technique. [find reference]
+~Org-noter~, by [[https://github.com/weirdNox][Gonçalo Santos]], was inspired by the now-orphaned ~Interleave~
+package, by [[https://github.com/rudolfochrist][Sebastian Christ]].  In Sebastian's words (with minor edits):
 
-  Nowadays, textbooks (or lecture materials) come in PDF format. Although almost
-  every PDF Reader has the ability to add some notes to the PDF itself, it is
-  not as powerful as it could be. This is what this Emacs minor mode tries to
-  accomplish. It presents your PDF side by side with an Org Mode buffer of your
-  notes, narrowed down to just those passages that are relevant to this
-  particular page in the document viewer.
-  #+end_quote
+#+begin_quote
+In the past, textbooks were sometimes published as interleaved editions. That
+meant, each page was followed by a blank page and ambitious students/scholars
+had the ability to take their notes directly in their copy of the
+textbook. Newton and Kant were prominent representatives of this
+technique. [find reference]
 
-  Org-noter's purpose is to let you create notes that are kept in sync when you
-  scroll through the document, but that are external to it - the notes
-  themselves live in an Org-mode file.  As such, this leverages the power of
-  [[http://orgmode.org/][Org-mode]] (the notes may have outlines, latex fragments, babel, etc...) while
-  acting like notes that are made /inside/ the document.  Also, taking notes is
-  very simple: just press =i= and annotate away!
+Nowadays, textbooks (or lecture materials) come in PDF format. Although almost
+every PDF Reader has the ability to add some notes to the PDF itself, it is
+not as powerful as it could be. This is what this Emacs minor mode tries to
+accomplish. It presents your PDF side by side with an Org Mode buffer of your
+notes, narrowed down to just those passages that are relevant to this
+particular page in the document viewer.
+#+end_quote
 
-  Org-noter is compatible with [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Document-View.html][DocView]], [[https://github.com/vedang/pdf-tools][PDF Tools]], [[https://depp.brause.cc/nov.el/][Nov.el]], and
-  [[DJVU-read][DJVU-image-mode]]. These modes make it possible to annotate *PDF*, *EPUB*,
-  *Microsoft Office*, DVI, PS, OpenDocument, and DJVU formatted files.  Note
-  that PDF support is our prime goal.  Other format have been supported by other
-  contributors, but we need code contributions from users of other formats to
-  maintain/progress usability with those formats.
+Org-noter's purpose is to let you create notes that are kept in sync when you
+scroll through the document, but that are external to it - the notes
+themselves live in an Org-mode file.  As such, this leverages the power of
+[[http://orgmode.org/][Org-mode]] (the notes may have outlines, latex fragments, babel, etc...) while
+acting like notes that are made /inside/ the document.  Also, taking notes is
+very simple: just press =i= and annotate away!
 
+Org-noter is compatible with [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Document-View.html][DocView]], [[https://github.com/vedang/pdf-tools][PDF Tools]], [[https://depp.brause.cc/nov.el/][Nov.el]], and
+[[https://elpa.gnu.org/packages/djvu.html][DJVU-image-mode]]. These modes make it possible to annotate *PDF*, *EPUB*,
+*Microsoft Office*, DVI, PS, OpenDocument, and DJVU formatted files.  Note
+that PDF support is our prime goal.  Other format have been supported by other
+contributors, but we need code contributions from users of other formats to
+maintain/progress usability with those formats.
 
-** Table of Contents                                                    :TOC:
-- [[#org-noter-an-interleavingnote-taking-package-for-documents][Org-noter: an interleaving/note-taking package for documents]]
-  - [[#installation][Installation]]
-  - [[#features][Features]]
-  - [[#usage][Usage]]
-  - [[#customization][Customization]]
-  - [[#keybindings-and-commands][Keybindings and commands]]
-  - [[#changes-to-note-insertion-since-version-141-melpa-version-201910201212][Changes to note insertion since version 1.4.1 (MELPA version 20191020.1212)]]
-- [[#acknowledgments][Acknowledgments]]
+* Installation
+** vanilla
++ clone this repo to a local directory
++ add to your init file:
+ #+begin_src elisp
+   (add-to-list 'load-path "<path-to-org-noter>")
+   (require 'org-noter)
+ #+end_src
 
-** Installation
-*** vanilla
-   1. clone this repo to a local directory
-   2. add to your init file:
-      #+begin_src elisp
-        (add-to-list 'load-path "<path-to-org-noter>")
-        (require 'org-noter)
-      #+end_src
-
-*** vanilla Emacs after version 29.1, which includes use-package
+** vanilla Emacs after version 29.1, which includes use-package
 
 #+begin_src elisp
-(use-package org-noter
-  :load-path "<path-to-org-noter>"
-  :ensure t
-  :demand t)
+  (use-package org-noter
+    :load-path "<path-to-org-noter>"
+    :ensure t
+    :demand t)
 #+end_src
 
-*** straight.el
-    In plain ~straight.el~ syntax
-    #+begin_src elisp
-      (straight-use-package 'org-noter)
-    #+end_src
+** straight.el
+In plain ~straight.el~ syntax
+ #+begin_src elisp
+ (straight-use-package 'org-noter)
+ #+end_src
 
-*** straight.el + use-package
-    #+begin_src elisp
-      (straight-use-package 'use-package)
-      (setq straight-use-package-by-default t)
-      (use-package org-noter)
-    #+end_src
+** straight.el + use-package
+ #+begin_src elisp
+   (straight-use-package 'use-package
+   (setq straight-use-package-by-default t)
+   (use-package org-noter)
+ #+end_src
 
-    Alternate form cribbed from
-    https://github.com/dmitrym0/org-noter-plus/issues/3
-    #+begin_src elisp
-      (use-package org-noter
-                   :straight
-                   (:repo "org-noter/org-noter"
-                          :host github
-                          :type git
-                          :files ("*.el" "modules/*.el")))
-    #+end_src
+ Alternate form cribbed from
+ https://github.com/dmitrym0/org-noter-plus/issues/3
+ #+begin_src elisp
+   (use-package org-noter
+     :straight
+     (:repo "org-noter/org-noter"
+            :host github
+            :type git
+            :files ("*.el" "modules/*.el")))
+ #+end_src
 
-*** MELPA
+** MELPA
     #+begin_src elisp
       (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
       (package-refresh-contents)
       (package-install 'org-noter)
     #+end_src
 
-** Features
-*** original org-noter (up to 2019)
-- Easy to use annotation interface :: Just press =i= in the
-     document buffer and annotate away!
+* Features
+** original org-noter (up to 2019)
++ Easy to use annotation interface :: Just press =i= in the document
+  buffer and annotate away!
+  
++ Keep your notes in sync with the document :: When you take a note by
+  pressing =i=, it saves the location where you took it so it is able
+  to show you the notes while you scroll, automatically!
 
-- Keep your notes in sync with the document :: When you take a note by pressing
-     =i=, it saves the location where you took it so it is able to show you
-     the notes while you scroll, automatically!
++ Easy navigation :: You may navigate your document as usual, seeing
+  the notes buffer scroll and show you the respective notes; however,
+  you may also navigate by notes, only seeing annotated
+  pages/chapters.
 
-- Easy navigation :: You may navigate your document as usual, seeing the notes buffer scroll and show you
-     the respective notes; however, you may also navigate by notes, only seeing annotated pages/chapters.
++ Isolated interface :: Each session has its own frame and the
+  document and notes buffers are indirect buffers to the original
+  ones. Killing any of these things will terminate your annotation
+  session.
 
-- Isolated interface :: Each session has its own frame and the document and notes buffers are indirect
-     buffers to the original ones. Killing any of these things will terminate your annotation session.
++ Simultaneous sessions :: You may open as many annotation sessions as
+  you wish, at the same time! The root heading of each document will
+  be made read-only to prevent you from deleting a heading from an
+  open session.
 
-- Simultaneous sessions :: You may open as many annotation sessions as you wish, at the same time! The
-     root heading of each document will be made read-only to prevent you from deleting a heading from an
-     open session.
++ Resume annotating from where you left :: When
+  ~org-noter-auto-save-last-location~ is non-nil, it will save the
+  last location you visited and pick it up when you start another
+  session! You may also set this per-document, [[#custom][read more here]].
 
-- Resume annotating from where you left :: When ~org-noter-auto-save-last-location~ is non-nil, it will
-     save the last location you visited and pick it up when you start another session! You may also set
-     this per-document, [[#custom][read more here]].
++ Keep your notes organized :: You may arrange your notes however you
+  want! You can create groups and nest notes (and even nest documents
+  inside other documents)!
 
-- Keep your notes organized :: You may arrange your notes however you want! You can create groups and
-     nest notes (and even nest documents inside other documents)!
++ Annotate ~org-attach~'ed files :: If you have any attached files, it
+  will let you choose one as the document to annotate.
 
-- Annotate ~org-attach~'ed files :: If you have any attached files, it will let you choose one as
-     the document to annotate.
+** new (all formats)
++ ~org-noter-enable-update-renames~ :: Optional feature to update
+  document paths when renaming or moving document files or notes
+  files.  This allows you to change your mind later about the names
+  and locations of your document files and notes files without having
+  to manually update all the links.
 
-*** new (all formats)
-    - ~org-noter-enable-update-renames~ :: Optional feature to update document
-      paths when renaming or moving document files or notes files.  This allows
-      you to change your mind later about the names and locations of your
-      document files and notes files without having to manually update all the
-      links.
++ ~org-noter-toggle-notes-window-location~ (~M-T~) :: Toggle between
+  horizontal and vertical document/notes layout.
 
-    - ~org-noter-toggle-notes-window-location~ (~M-T~) :: Toggle between
-      horizontal and vertical document/notes layout.
++ ~org-noter-start-from-dired~ (Suggested keybinding: ~M-s n~) :: Start
+  sessions directly from ~dired~.  Opens all marked files or the file
+  at point if none are marked.
 
-    - ~org-noter-start-from-dired~ (Suggested keybinding: ~M-s n~) :: Start
-      sessions directly from ~dired~.  Opens all marked files or the file at
-      point if none are marked.
+** new (PDFs only with the [[https://github.com/vedang/pdf-tools][pdftools]] package)
 
-*** new (PDFs only with the [[https://github.com/vedang/pdf-tools][pdftools]] package)
-    - 2D precise notes :: ([[https://github.com/ahmed-shariff/org-noter][Ahmed Shariff]]) Location tooltip appears at start of
-      selected text or point of click.
++ 2D precise notes :: ([[https://github.com/ahmed-shariff/org-noter][Ahmed Shariff]]) Location tooltip appears at
+  start of selected text or point of click.
 
-    - Multicolumn ordering of precise notes :: With the ~COLUMN_EDGES~ property,
-      you can specify the number of columns in a multicolumn document (or pages
-      thereof).  Precise notes are ordered vertically within columns.  Use
-      ~M-x org-noter-pdf-set-columns~ to interactively set ~COLUMN_EDGES~ for
-      the current heading.  The property is inheritable, so it can be set at the
-      page, chapter/section, or document level.  See [[file:docs/HOWTO.org]] for
-      more details.
++ Multicolumn ordering of precise notes :: With the ~COLUMN_EDGES~
+  property, you can specify the number of columns in a multicolumn
+  document (or pages thereof).  Precise notes are ordered vertically
+  within columns.  Use ~M-x org-noter-pdf-set-columns~ to
+  interactively set ~COLUMN_EDGES~ for the current heading.  The
+  property is inheritable, so it can be set at the page,
+  chapter/section, or document level.  See [[file:docs/HOWTO.org]] for
+  more details.
 
-    - Highlighting of selected text :: Default behavior (on/off) is
-      user-customizable via ~org-noter-highlight-selected-text~.  Non-default
-      behavior is activated with a =C-u= prefix to the note insertion command.
++ Highlighting of selected text :: Default behavior (on/off) is
+  user-customizable via ~org-noter-highlight-selected-text~.
+  Non-default behavior is activated with a =C-u= prefix to the note
+  insertion command.
 
-    - Customizable tooltip arrow colors :: ~org-noter-arrow-foreground-color~ (default
-      orange-red) and ~org-noter-arrow-foreground-color~ (default white) are
-      both user customizable.
++ Customizable tooltip arrow colors :: ~org-noter-arrow-foreground-color~
+  (default orange-red) and ~org-noter-arrow-foreground-color~ (default
+  white) are both user customizable.
 
 [TODO: make/link to screencast]
 
-** Usage
+* Usage
 
 If you want to give it a try without much trouble:
 - Open an Org file where you want the notes to go.
 - Create a root heading to hold the notes.
 - Run =M-x org-noter= inside the Org file.
-  On the first run, it will ask you for the path of the document and save it in a
-  property. By default, it will also let you annotate an attached file [[https://orgmode.org/manual/Attachments.html][(org-attach documentation)]].
+  - On the first run, it will ask you for the path of the document and save it in a
+    property. By default, it will also let you annotate an attached file [[https://orgmode.org/manual/Attachments.html][(org-attach documentation)]].
 
 This will open a new dedicated frame where you can use [[#keys][the keybindings described here]].
 
 More generally, there are two modes of operation. You may run
 =M-x org-noter=:
-- Inside a heading in an Org notes file :: This will associate that heading with a
-     document and open a session with it. This mode is the one described in the example
-     above.
+- Inside a heading in an Org notes file :: This will associate that
+  heading with a document and open a session with it. This mode is the
+  one described in the example above.
 
-- In a document :: Run =M-x org-noter= when viewing a
-                   document (eg. PDF, epub...).
+- In a document :: Run =M-x org-noter= when viewing a document
+  (eg. PDF, epub...).
 
-                   This will try to find the respective notes file automatically. It will
-                   search in all parent folders and some specific folders set by you. See
-                   ~org-noter-default-notes-file-names~ and ~org-noter-notes-search-path~
-                   for more information.
+  - This will try to find the respective notes file automatically. It
+    will search in all parent folders and some specific folders set by
+    you. See ~org-noter-default-notes-file-names~ and
+    ~org-noter-notes-search-path~ for more information.
 
 There is, of course, more information in the docstrings of each command.
 
-** TODO Customization
-   :PROPERTIES:
-   :CUSTOM_ID: custom
-   :END:
+* TODO Customization
+:PROPERTIES:
+:CUSTOM_ID: custom
+:END:
 
 See [[file:docs/CUSTOMIZATIONS.org]] for examples of user & maintainer customizations
 to this package.
@@ -232,12 +239,12 @@ permanent, or revert to the default):
 
 - [[https://www.orgroam.com/][org-roam ]]integration: run ~(org-noter-enable-org-roam-integration)~ after loading org-noter.
 
-
-** Keybindings and commands
-   :PROPERTIES:
+* Keybindings and commands
+:PROPERTIES:
 :CUSTOM_ID: keys
 :END:
 | Key        | Description                              | Where?                    |
+|------------+------------------------------------------+---------------------------|
 | =i=        | Insert note                              | Document buffer           |
 | =C-i, TAB= | Insert note, toggle no-questions         | Document buffer           |
 | =M-i=      | Insert precise note                      | Document buffer           |
@@ -270,7 +277,7 @@ annotations (or both!) as notes, and it may be used, for example, as a starting 
 You may also want to check the docstrings of the functions associated with the
 keybindings, because there is some extra functionality in some.
 
-** Changes to note insertion since version 1.4.1 (MELPA version 20191020.1212)
+* Changes to note insertion since version 1.4.1 (MELPA version 20191020.1212)
    - more consistent use of selected text in title or body
    - more consistent primary default title (short-selected-text)
    - more consistent secondary default title ("Notes for page <location>")
@@ -288,7 +295,7 @@ keybindings, because there is some extra functionality in some.
 
      Previously, long selections were those with more than 3 lines.
 
-*** Original
+** Original
    |                 | insert-note =i=                | precise note =M-i=        | no-questions =C-i, TAB= |
    |-----------------+--------------------------------+---------------------------+-------------------------|
    | title prompt?   | Y                              | Y                         | N                       |
@@ -298,7 +305,7 @@ keybindings, because there is some extra functionality in some.
    | body            | selected-text on existing note | selected-text (> 3 lines) | none                    |
    |-----------------+--------------------------------+---------------------------+-------------------------|
 
-*** Refactored
+** Refactored
    |                     | insert-note               | precise note              | insert, no-questions      | precise, no-questions     |
    |---------------------+---------------------------+---------------------------+---------------------------+---------------------------|
    | title prompt?       | Y                         | Y                         | N                         | N                         |

@@ -1,23 +1,38 @@
 export EMACS ?= $(shell which emacs)
-CASK_DIR := $(shell cask package-directory)
+ORG_DIR1 = -L $(word 1,$(wildcard $(HOME)/.emacs.d/elpa/org-9*))
+ifeq ($(words $(ORG_DIR1)),1)
+	ORG_DIR1 =
+endif
+ORG_LIB = -l org -l ox-texinfo
+ORG_PUB = --eval='(progn (find-file (expand-file-name "README.org")) (org-texinfo-export-to-info))'
+EMACS_ARGS = --batch $(ORG_DIR1) $(ORG_LIB) $(ORG_PUB)
+
+all:
+	echo all
+
+CASK = cask
+ifdef CASK
+	CASK_DIR := $(shell cask package-directory)
+endif
 
 $(CASK_DIR): Cask
-	cask install
+	$(CASK) install
 	@touch $(CASK_DIR)
 
 .PHONY: cask
 cask: $(CASK_DIR)
 
 .PHONY: compile
-compile: cask
-	cask emacs -batch -L . -L test \
+compile: $(CASK)
+	$(CASK) emacs -batch -L . -L test \
 	--eval "(setq byte-compile-error-on-warn t)" \
 	-f batch-byte-compile $$(cask files); \
 	(ret=$$? ; cask clean-elc && exit $$ret)
+
 .PHONY: test coverage
 test:
 	rm -rf coverage
-	cask exec buttercup -L .
+	$(CASK) exec buttercup -L .
 
 coverage: test
 	genhtml -o coverage/ coverage/lcov.info
@@ -54,3 +69,7 @@ bump-minor:
 	echo "Don't forget to push the new tag."
 
 .PHONY: current-version bump-patch bump-minor
+
+info: README.org
+	$(EMACS) $(EMACS_ARGS)
+	install-info README.info dir
